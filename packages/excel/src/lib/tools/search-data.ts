@@ -48,8 +48,8 @@ export const searchDataTool = defineTool({
     explanation: Type.Optional(
       Type.String({
         description:
-          "Brief explanation of what you're searching (max 50 chars)",
-        maxLength: 50,
+          "Brief explanation of what you're searching (max 255 chars)",
+        maxLength: 255,
       }),
     ),
   }),

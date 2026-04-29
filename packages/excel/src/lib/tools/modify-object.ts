@@ -68,8 +68,8 @@ export const modifyObjectTool = defineTool({
     properties: Type.Optional(PropertiesSchema),
     explanation: Type.Optional(
       Type.String({
-        description: "Brief explanation (max 50 chars)",
-        maxLength: 50,
+        description: "Brief explanation (max 255 chars)",
+        maxLength: 255,
       }),
     ),
   }),

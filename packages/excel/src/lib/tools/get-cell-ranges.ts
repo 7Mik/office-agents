@@ -28,8 +28,8 @@ export const getCellRangesTool = defineTool({
     ),
     explanation: Type.Optional(
       Type.String({
-        description: "Brief explanation of what you're reading (max 50 chars)",
-        maxLength: 50,
+        description: "Brief explanation of what you're reading (max 255 chars)",
+        maxLength: 255,
       }),
     ),
   }),

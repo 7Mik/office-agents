@@ -60,21 +60,54 @@ More often than not, `basic` fetch is good enough but requires a CORS proxy conf
 > [!NOTE]
 > This project is **not production-ready** and is not intended for publication to the Microsoft Add-in Store. Think of it as a framework and reference for building your own Office-based agents. That said, I'm happy to squash bugs — feel free to report them in [Issues](https://github.com/hewliyang/office-agents/issues).
 
-```bash
-pnpm install                # Install all dependencies
-pnpm dev-server:excel       # Start Excel dev server (https://localhost:3000)
-pnpm dev-server:ppt         # Start PowerPoint dev server (https://localhost:3001)
-pnpm dev-server:word        # Start Word dev server (https://localhost:3002)
-pnpm start:excel            # Launch Excel with add-in sideloaded
-pnpm start:ppt              # Launch PowerPoint with add-in sideloaded
-pnpm start:word             # Launch Word with add-in sideloaded
-pnpm build                  # Build all packages
-pnpm typecheck              # TypeScript type checking (all packages)
-pnpm lint                   # Run Biome linter
-pnpm format                 # Format code with Biome
-pnpm check                  # Typecheck + lint
-pnpm validate               # Validate Office manifests
-```
+### Quick Start
+
+1. **Install dependencies**:
+   ```bash
+   pnpm install
+   ```
+2. **Initial build**: (Recommended to link workspace packages)
+   ```bash
+   pnpm build
+   ```
+
+### Running the Add-ins
+
+To develop locally, you need to run the **dev server** in one terminal and the **start command** in another. The dev server provides hot-reloading, while the start command sideloads the manifest into the Office application.
+
+#### 📊 Excel Example
+1. **Terminal 1** (Dev Server):
+   ```bash
+   pnpm dev-server:excel
+   ```
+2. **Terminal 2** (Launch Excel):
+   ```bash
+   pnpm start:excel
+   ```
+
+#### 📽️ PowerPoint Example
+1. **Terminal 1** (Dev Server):
+   ```bash
+   pnpm dev-server:ppt
+   ```
+2. **Terminal 2** (Launch PowerPoint):
+   ```bash
+   pnpm start:ppt
+   ```
+
+### All Scripts
+
+| Command | Description |
+| ------- | ----------- |
+| `pnpm install` | Install all dependencies |
+| `pnpm dev-server:[excel\|ppt\|word]` | Start the dev server for a specific app |
+| `pnpm start:[excel\|ppt\|word]` | Launch the Office app with the add-in |
+| `pnpm build` | Build all packages for production |
+| `pnpm typecheck` | Run TypeScript type checking |
+| `pnpm lint` | Run Biome linter |
+| `pnpm format` | Format code with Biome |
+| `pnpm check` | Run typecheck + lint |
+| `pnpm validate` | Validate Office manifests |
 
 ### Office Bridge
 

@@ -12,8 +12,18 @@ let cachedCounter: number | null = null;
 let isDirty = false;
 
 async function loadFromSettings(): Promise<void> {
+  console.log("[sheet-id-map] Loading from settings...");
   return new Promise((resolve) => {
-    Office.context.document.settings.refreshAsync(() => {
+    const timeout = setTimeout(() => {
+      console.warn("[sheet-id-map] loadFromSettings timed out after 5s");
+      cachedMap = cachedMap || {};
+      cachedCounter = cachedCounter || 0;
+      resolve();
+    }, 5000);
+
+    Office.context.document.settings.refreshAsync((result) => {
+      clearTimeout(timeout);
+      console.log("[sheet-id-map] loadFromSettings refreshAsync callback", result.status);
       cachedMap = Office.context.document.settings.get(SETTINGS_KEY_MAP) || {};
       cachedCounter =
         Office.context.document.settings.get(SETTINGS_KEY_COUNTER) || 0;
@@ -25,10 +35,19 @@ async function loadFromSettings(): Promise<void> {
 async function saveToSettings(): Promise<void> {
   if (!isDirty) return;
 
+  console.log("[sheet-id-map] Saving to settings...");
   return new Promise((resolve) => {
+    const timeout = setTimeout(() => {
+      console.warn("[sheet-id-map] saveToSettings timed out after 5s");
+      isDirty = false;
+      resolve();
+    }, 5000);
+
     Office.context.document.settings.set(SETTINGS_KEY_MAP, cachedMap);
     Office.context.document.settings.set(SETTINGS_KEY_COUNTER, cachedCounter);
-    Office.context.document.settings.saveAsync(() => {
+    Office.context.document.settings.saveAsync((result) => {
+      clearTimeout(timeout);
+      console.log("[sheet-id-map] saveToSettings saveAsync callback", result.status);
       isDirty = false;
       resolve();
     });

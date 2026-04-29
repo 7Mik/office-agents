@@ -131,8 +131,8 @@ export const screenshotRangeTool = defineTool({
     explanation: Type.Optional(
       Type.String({
         description:
-          "Brief explanation of what you're inspecting (max 50 chars)",
-        maxLength: 50,
+          "Brief explanation of what you're inspecting (max 255 chars)",
+        maxLength: 255,
       }),
     ),
   }),

@@ -31,14 +31,17 @@ export const getRangeAsCsvTool = defineTool({
       }),
     ),
   }),
-  execute: async (_toolCallId, params) => {
+  execute: async (toolCallId, params) => {
+    console.log(`[tool:get_range_as_csv] ${toolCallId} start`, params);
     try {
       const result = await getRangeAsCsv(params.sheetId, params.range, {
         includeHeaders: params.includeHeaders,
         maxRows: params.maxRows,
       });
+      console.log(`[tool:get_range_as_csv] ${toolCallId} success`);
       return toolSuccess(result);
     } catch (error) {
+      console.error(`[tool:get_range_as_csv] ${toolCallId} error`, error);
       const message =
         error instanceof Error ? error.message : "Unknown error reading CSV";
       return toolError(message);

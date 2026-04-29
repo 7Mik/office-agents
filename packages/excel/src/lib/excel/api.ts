@@ -98,9 +98,11 @@ export async function getWorksheetById(
   context: Excel.RequestContext,
   sheetId: number,
 ): Promise<Excel.Worksheet | null> {
+  console.log(`[getWorksheetById] Searching for sheetId: ${sheetId}`);
   const sheets = context.workbook.worksheets;
   sheets.load("items");
   await context.sync();
+  console.log(`[getWorksheetById] Found ${sheets.items.length} sheets`);
 
   for (const sheet of sheets.items) {
     sheet.load("id");
@@ -108,14 +110,17 @@ export async function getWorksheetById(
   await context.sync();
 
   const idMap = await preloadSheetIds(sheets.items);
+  console.log(`[getWorksheetById] idMap preloaded:`, Array.from(idMap.entries()));
 
   for (const sheet of sheets.items) {
     const stableId = idMap.get(sheet.id);
     if (stableId === sheetId) {
+      console.log(`[getWorksheetById] Found match for stableId: ${sheetId}`);
       return sheet;
     }
   }
 
+  console.log(`[getWorksheetById] No match found for stableId: ${sheetId}`);
   return null;
 }
 
@@ -264,6 +269,7 @@ export async function getRangeAsCsv(
   options: { includeHeaders?: boolean; maxRows?: number } = {},
 ): Promise<GetRangeAsCsvResult> {
   const { includeHeaders = true, maxRows = 500 } = options;
+  console.log(`[getRangeAsCsv] sheetId: ${sheetId}, range: ${rangeAddr}, maxRows: ${maxRows}`);
 
   return Excel.run(async (context) => {
     const sheet = await getWorksheetById(context, sheetId);
@@ -272,7 +278,9 @@ export async function getRangeAsCsv(
     sheet.load("name");
     const range = sheet.getRange(rangeAddr);
     range.load("values,rowCount,columnCount");
+    console.log(`[getRangeAsCsv] Syncing to get range values...`);
     await context.sync();
+    console.log(`[getRangeAsCsv] Range loaded: ${range.rowCount}x${range.columnCount}`);
 
     const startRow = includeHeaders ? 0 : 1;
     const availableRows = range.rowCount - startRow;
@@ -292,6 +300,7 @@ export async function getRangeAsCsv(
       rows.push(row.join(","));
     }
 
+    console.log(`[getRangeAsCsv] Returning ${rows.length} rows`);
     return {
       success: true,
       csv: rows.join("\n"),
